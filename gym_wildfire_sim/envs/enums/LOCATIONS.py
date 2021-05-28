@@ -3,9 +3,9 @@ import random
 import warnings
 class LOCATIONS(IntEnum):
     N = 0
-    S = 2
-    E = 3
-    W = 4
+    S = 1
+    E = 2
+    W = 3
     @staticmethod
     def print():
         for location in LOCATIONS:
