@@ -20,15 +20,16 @@ class Cell:
         self.theta = 0
         self.current_deployments = []
         self.archive_deployments = []
+        self.firefighter_turn_counter = []
         self.fsr = 0.0
 
         self._init_values()
 
     def _init_values(self):
         self.wind_velo = self.terrain.base_wind_velo + \
-            random.uniform(-2.5, 2.5)
+            round(random.uniform(-2.5, 2.5),2)
         self.fuel_pack_ratio = self.terrain.base_packing_ratio + \
-            random.uniform(-0.02, 0.02)
+            round(random.uniform(-0.02, 0.02),4)
         self.theta = random.randrange(-45, 45)
         self._calculate_fmc()
         self._calculate_fsr()
@@ -41,6 +42,8 @@ class Cell:
     def add_deployment(self, deployment):
         self.current_deployments.append(deployment)
         self.archive_deployments.append(deployment)
+        if deployment == DEPLOYMENTS.FIREFIGHTER:
+            self.firefighter_turn_counter.append(1)
 
     def add_deployments(self, deployments):
         self.current_deployments.extend(deployments)
@@ -69,6 +72,9 @@ class Cell:
             dep for dep in self.current_deployments if dep not in dep_types]
         self.current_deployments = updated_deps
 
+    def get_dep_history(self, deployment):
+        return self.archive_deployments
+
     def _calculate_fsr(self):
         feet_min = (0.0002*pow(self.fmc, 2)-0.008 *
                     self.fmc+0.1225)*pow(self.wind_velo, 2)
@@ -80,12 +86,12 @@ class Cell:
         Bs = 5.275*pow(self.fuel_pack_ratio, -0.3) * \
             pow(math.tan(self.theta), 2)
         feet_min *= Ba * (1+Bs)
-        self.fsr = feet_min * 60 / 5280
+        self.fsr = round(feet_min * 60 / 5280, 4)
 
     def _calculate_fmc(self):
         temp_index = int((self.terrain.temp-10)/20)
         humidity_index = int(self.terrain.humidity/5)
-        self.fmc = self.terrain.fmc_table[humidity_index][temp_index]
+        self.fmc = self.terrain.FMC_TABLE[humidity_index][temp_index]
 
     def get_data(self):
         self.update_values()
@@ -98,6 +104,7 @@ class Cell:
                        'theta': self.theta,
                        'fuel_pack_ratio': self.fuel_pack_ratio,
                        'fsr': self.fsr}
+        return cell_values
 
     def _check_edge(self):
         edge = False
@@ -109,5 +116,5 @@ class Cell:
 
 
 if __name__ == '__main__':
-    c = Cell(4, 4(LOCATIONS.N, LOCATIONS.S, LOCATIONS.E, LOCATIONS.W))
+    c = Cell(4, 4,(LOCATIONS.N, LOCATIONS.S, LOCATIONS.E, LOCATIONS.W))
     print(c.get_data)
