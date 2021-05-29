@@ -7,7 +7,7 @@ from gym_wildfire_sim.envs.enums.LOCATIONS import LOCATIONS
 from gym_wildfire_sim.envs.enums.PLAYER_ACTIONS import DEPLOYMENTS, FIRELINE_DIRECTIONS
 from gym_wildfire_sim.envs.enums.PLAY_TYPE import PLAY_TYPE
 
-class WiildfireSim(gym.Env):
+class WildfireSim(gym.Env):
 
     def __init__(self):
         self.play_type = PLAY_TYPE.MACHINE
