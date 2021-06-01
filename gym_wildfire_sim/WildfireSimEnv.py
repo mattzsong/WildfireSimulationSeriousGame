@@ -28,6 +28,8 @@ class WildfireSim(gym.Env):
 
     def reset(self):
         self.terrain = Terrain()
+        for _ in range(4):
+            self.terrain.do_turn([0,0,0])
         self.total_score = 0
         self.turn = 0
         self.done = False

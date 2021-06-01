@@ -88,6 +88,7 @@ class Terrain:
                 elif y == 8:
                     locations.remove(LOCATIONS.E)
             cells[x].append(Cell(x, y, locations, self))
+        self.cells[4][4].burning_percent = 100
 
     def do_turn(self, action):
         x = action[0]
@@ -228,6 +229,9 @@ class Terrain:
                 state[x*9+y+1, 1] = cell_data.get('theta')
                 for i in range(len(cell.current_deployments)):
                     state[x*9+y+1, i+2] = cell.current_deployments[i].value
+
+    def human_render(self):
+        
                 
     def rl_render(self):
         minimal_report = 'Turn {0} of {1}. Turn Score: {2}. Total Score: {3}'.format(self.turn, self.max_turns,
@@ -244,6 +248,8 @@ class Terrain:
                           'wind_dir': self.wind_dir,
                           'base_packing_ratio': self.base_packing_ratio}
         return terrain_values
+
+    #TODO: create randomize_base_values method and implement in each setup of env
 
 if __name__ == '__main__':
     terrain = Terrain()
